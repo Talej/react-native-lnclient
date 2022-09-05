@@ -51,20 +51,6 @@ describe("Host & credentials tests", () => {
       })
     );
   });
-
-  /*test('Check tor host', async () => {
-        const torHost = 'bxuqmgowd2tdnvmiiyzhaag5idg4guorwu5ubi3tzwtds2abur35mgad.onion:9735';
-        const config = { nodeType, host: torHost, macroon: nodeMacroon };
-        const client = APIClient(config);
-
-        const info = await client.getInfo()
-
-        expect(info).toEqual(expect.objectContaining({
-            version: expect.any(String),
-            identity_pubkey: expect.any(String),
-            alias: expect.any(String)
-        }))
-    })*/
 });
 
 describe("Invoice related tests", () => {

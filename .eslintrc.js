@@ -5,7 +5,11 @@ module.exports = {
     node: true,
     "jest/globals": true,
   },
-  extends: ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+  extends: [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:jest/recommended",
+  ],
   overrides: [],
   parser: "@typescript-eslint/parser",
   parserOptions: {
