@@ -10,7 +10,11 @@ module.exports = {
     "plugin:@typescript-eslint/recommended",
     "plugin:jest/recommended",
   ],
-  overrides: [],
+  overrides: [
+    {
+      files: ["src/**/*.ts"],
+    },
+  ],
   parser: "@typescript-eslint/parser",
   parserOptions: {
     ecmaVersion: "latest",
