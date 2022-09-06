@@ -27,7 +27,7 @@ describe("Host & credentials tests", () => {
       host: "https://www.invalidhost:8080",
     });
 
-    await expect(badHost.getInfo()).rejects.toMatch(/Error:/);
+    await expect(badHost.getInfo()).rejects.toThrowError();
   });
 
   test("Check invalid macroon", async () => {
@@ -37,7 +37,7 @@ describe("Host & credentials tests", () => {
       host: process.env.LNNODE_HOST,
       macroon: badMacroon,
     });
-    await expect(badClient.getInfo()).rejects.toMatch("Error");
+    await expect(badClient.getInfo()).rejects.toThrowError();
   });
 
   test("Check valid host macroon using getInfo endpoint", async () => {
@@ -93,7 +93,7 @@ describe("Invoice related tests", () => {
 
 describe("Payment related tests", () => {
   let newInv;
-  let payment_hash;
+  let paymentHash;
 
   beforeAll(async () => {
     newInv = await client.createInvoice({ value: 1 });
@@ -116,7 +116,7 @@ describe("Payment related tests", () => {
 
   test("Get a list of payments", async () => {
     const payments = await client.getPayments({ include_incomplete: true });
-    payment_hash = payments?.payments[0].payment_hash;
+    paymentHash = payments?.payments[0].payment_hash;
 
     expect(payments).toEqual(
       expect.objectContaining({
@@ -126,11 +126,11 @@ describe("Payment related tests", () => {
   });
 
   test("Check that we have a payment_hash", () => {
-    expect(payment_hash).toMatch(/.+/);
+    expect(paymentHash).toMatch(/.+/);
   });
 
   test("Get a single payment by payment_hash", async () => {
-    expect(await client.getPayment(payment_hash)).toEqual(
+    expect(await client.getPayment(paymentHash)).toEqual(
       expect.objectContaining({
         result: expect.objectContaining({
           payment_hash: expect.any(String),
