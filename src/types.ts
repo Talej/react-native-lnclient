@@ -1,4 +1,4 @@
-export const NODETYPE_LND = "lnd";
+export const NODETYPE_LND = 'lnd'
 
 export type configProps = {
   nodeType: typeof NODETYPE_LND;

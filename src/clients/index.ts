@@ -1,1 +1,1 @@
-export { lnd } from "./lnd";
+export { lnd } from './lnd'

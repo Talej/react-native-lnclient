@@ -1,58 +1,58 @@
-import { lnd } from "./clients";
-import * as types from "./types";
-import { TorClient } from "@mich4l/tor-client";
+import { lnd } from './clients'
+import * as types from './types'
+import { TorClient } from '@mich4l/tor-client'
 
 export const getNodeType = (type: string): typeof types.NODETYPE_LND => {
   switch (type) {
-    case "lnd":
-      return types.NODETYPE_LND;
+    case 'lnd':
+      return types.NODETYPE_LND
   }
 
-  return null;
-};
+  return null
+}
 
 const APIClient = (config: types.configProps) => {
-  let lnNode = null;
+  let lnNode = null
   switch (config.nodeType) {
     case types.NODETYPE_LND:
-      lnNode = lnd(config);
-      break;
+      lnNode = lnd(config)
+      break
 
     default:
-      throw Error("Unsupported node type");
+      throw Error('Unsupported node type')
   }
 
   const getInfo = async () => {
-    return await lnNode.getInfo();
-  };
+    return await lnNode.getInfo()
+  }
 
   const getInvoices = async (props?: types.getInvoicesProps) => {
-    return await lnNode.getInvoices(props);
-  };
+    return await lnNode.getInvoices(props)
+  }
 
   const getInvoice = async (hash: string) => {
-    return await lnNode.getInvoice(hash);
-  };
+    return await lnNode.getInvoice(hash)
+  }
 
   const createInvoice = async (props?: types.createInvoiceProps) => {
-    return await lnNode.createInvoice(props);
-  };
+    return await lnNode.createInvoice(props)
+  }
 
   const subscribeInvoice = async (hash: string) => {
-    return await lnNode.subscribeInvoice(hash);
-  };
+    return await lnNode.subscribeInvoice(hash)
+  }
 
   const getPayments = async (props?: types.getPaymentsProps) => {
-    return await lnNode.getPayments(props);
-  };
+    return await lnNode.getPayments(props)
+  }
 
   const getPayment = async (paymentHash: string) => {
-    return await lnNode.getPayment(paymentHash);
-  };
+    return await lnNode.getPayment(paymentHash)
+  }
 
   const sendPayment = async (props: types.sendPaymentProps) => {
-    return await lnNode.sendPayment(props);
-  };
+    return await lnNode.sendPayment(props)
+  }
 
   return {
     getInfo,
@@ -62,11 +62,11 @@ const APIClient = (config: types.configProps) => {
     subscribeInvoice,
     getPayments,
     getPayment,
-    sendPayment,
-  };
-};
+    sendPayment
+  }
+}
 
-export default APIClient;
+export default APIClient
 
 /* (async () => {
         const torclient = new TorClient({ socksHost: '127.0.0.1', socksPort: 9050 });
