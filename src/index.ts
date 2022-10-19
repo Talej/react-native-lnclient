@@ -1,89 +1,56 @@
-import { lnd } from './clients'
+import { Eclair, LND, CLN } from './clients'
 import * as types from './types'
-import { TorClient } from '@mich4l/tor-client'
 
-export const getNodeType = (type: string): typeof types.NODETYPE_LND => {
-  switch (type) {
-    case 'lnd':
-      return types.NODETYPE_LND
-  }
+const APIClient = {
+  getNodeType: (type: string): types.nodeTypes => {
+    switch (type) {
+      case 'lnd':
+        return types.NODETYPE_LND
 
-  return null
-}
+      case 'eclair':
+        return types.NODETYPE_ECLAIR
 
-const APIClient = (config: types.configProps) => {
-  let lnNode = null
-  switch (config.nodeType) {
-    case types.NODETYPE_LND:
-      lnNode = lnd(config)
-      break
+      case 'cln':
+        return types.NODETYPE_CLN
+    }
 
-    default:
-      throw Error('Unsupported node type')
-  }
+    return null
+  },
 
-  const getInfo = async () => {
-    return await lnNode.getInfo()
-  }
+  get: (config: types.configProps) => {
+    let lnNode = null
+    switch (config.nodeType) {
+      case types.NODETYPE_LND:
+        lnNode = new LND(config)
+        break
 
-  const getInvoices = async (props?: types.getInvoicesProps) => {
-    return await lnNode.getInvoices(props)
-  }
+      case types.NODETYPE_ECLAIR:
+        lnNode = new Eclair(config)
+        break
 
-  const getInvoice = async (hash: string) => {
-    return await lnNode.getInvoice(hash)
-  }
+      case types.NODETYPE_CLN:
+        lnNode = new CLN(config)
+        break
 
-  const createInvoice = async (props?: types.createInvoiceProps) => {
-    return await lnNode.createInvoice(props)
-  }
+      default:
+        throw Error('Unsupported node type')
+    }
 
-  const subscribeInvoice = async (hash: string) => {
-    return await lnNode.subscribeInvoice(hash)
-  }
-
-  const getPayments = async (props?: types.getPaymentsProps) => {
-    return await lnNode.getPayments(props)
-  }
-
-  const getPayment = async (paymentHash: string) => {
-    return await lnNode.getPayment(paymentHash)
-  }
-
-  const sendPayment = async (props: types.sendPaymentProps) => {
-    return await lnNode.sendPayment(props)
-  }
-
-  return {
-    getInfo,
-    getInvoices,
-    getInvoice,
-    createInvoice,
-    subscribeInvoice,
-    getPayments,
-    getPayment,
-    sendPayment
+    return lnNode
   }
 }
 
 export default APIClient
 
 /* (async () => {
-        const torclient = new TorClient({ socksHost: '127.0.0.1', socksPort: 9050 });
-        const url = 'https://qgtcf377lmt46yrrpekcmjojxajleqvfautwfzokgpglbow7yigddrad.onion:8080/v1/getinfo';
-        //const response = await torclient.get(url);
-        //let response:any = await torclient.torcheck();
-        //console.log(response); // HTML -> string
-        constresponse = await torclient.get(url)
-        console.log(response)
+        require('dotenv').config();
 
-        /*require('dotenv').config();
-
-        const nodeType = getNodeType(process.env.LNNODE_TYPE);
+        const nodeType = APIClient.getNodeType(process.env.LNNODE_TYPE);
         const host = process.env.LNNODE_HOST;
-        const macroon = process.env.LNNODE_MACROON;
+        //const macroon = process.env.LNNODE_MACROON;
+        const pass = process.env.LNNODE_PASS;
 
-        const client = APIClient({ nodeType, host, macroon });
+        const client = APIClient.get({ nodeType, host, pass });
 
         const result = await client.getInfo();
         //const result = await client.getInvoices({pending_only: true});
@@ -97,5 +64,5 @@ export default APIClient
         //console.log('hex', Buffer.from(payment_hash, 'hex').toString('base64'))
         //const result = await client.getPayment(payment_hash);
 
-        console.log(result)
+        //console.log(result)
     })(); */

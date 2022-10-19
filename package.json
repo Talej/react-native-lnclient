@@ -26,6 +26,7 @@
     "@babel/preset-env": "^7.18.10",
     "@types/express": "^4.17.13",
     "@types/jest": "^28.1.7",
+    "@types/node-fetch": "^2.6.2",
     "@typescript-eslint/eslint-plugin": "5.33.0",
     "@typescript-eslint/parser": "5.33.0",
     "babel-jest": "^28.0.8",
@@ -50,7 +51,6 @@
     "**/*": "prettier --write --ignore-unknown"
   },
   "dependencies": {
-    "@mich4l/tor-client": "^1.0.4",
     "dotenv": "^16.0.2",
     "eslint-plugin-jest": "^27.0.1",
     "express": "^4.18.1",
