@@ -106,7 +106,7 @@ class RESTClient {
         headers,
         body:
           method === "POST" && args
-            ? headers["Content-Type"] == "application/json"
+            ? headers["Content-Type"] === "application/json"
               ? JSON.stringify(args)
               : Object.entries(args)
                   .map(
@@ -142,6 +142,7 @@ class RESTClient {
                 })
                 .catch((e) => {
                   if (typeof e === "string") throw Error(e);
+                  if (e instanceof Error) throw e;
                   throw Error(response.statusText);
                 });
             }

@@ -6,7 +6,8 @@
     "moduleResolution": "node",
     "sourceMap": true,
     "allowJs": true,
-    "outDir": "dist"
+    "outDir": "dist",
+    "declaration": true
   },
   "lib": ["es2015"]
 }

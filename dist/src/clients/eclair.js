@@ -73,26 +73,69 @@ class Eclair extends restclient_1.default {
   }
   getInvoices(props) {
     return __awaiter(this, void 0, void 0, function* () {
-      return this.postRequest("/listinvoices", props);
+      const response = yield this.postRequest("/listinvoices", props);
+      if (response) {
+        return {
+          invoices: response.map((v) =>
+            (0, misc_1.mapKeys)(v, {
+              timestamp: ["creation_date", misc_1.toString],
+              serialized: "payment_request",
+              description: "memo",
+              paymentHash: "r_hash",
+              expiry: ["expiry", misc_1.toString],
+              minFinalCltvExpiry: ["cltv_expiry", misc_1.toString],
+              amount: "value_msat",
+              amount_sat: "value",
+              features: "features",
+              routingInfo: "route_hints",
+            })
+          ),
+        };
+      }
+      return response;
     });
   }
   getInvoice(paymentHash) {
     return __awaiter(this, void 0, void 0, function* () {
-      return this.postRequest("/getinvoice", { paymentHash });
+      const response = yield this.postRequest("/getinvoice", { paymentHash });
+      if (response) {
+        if (response.amount)
+          response.amount_sat = Number(response.amount) / 1000;
+        if (!response.amount) response.amount = 0;
+        if (!response.amount_sat) response.amount_sat = 0;
+        return (0, misc_1.mapKeys)(response, {
+          timestamp: ["creation_date", misc_1.toString],
+          serialized: "payment_request",
+          description: "memo",
+          paymentHash: "r_hash",
+          expiry: ["expiry", misc_1.toString],
+          minFinalCltvExpiry: ["cltv_expiry", misc_1.toString],
+          amount: ["value_msat", misc_1.toString],
+          amount_sat: ["value", misc_1.toString],
+          features: "features",
+          routingInfo: "route_hints",
+        });
+      }
+      return response;
     });
   }
   createInvoice(props) {
     return __awaiter(this, void 0, void 0, function* () {
       const data = {};
-      if (props === null || props === void 0 ? void 0 : props.value)
-        data.amountMsat = props.value * 1000;
-      if (props === null || props === void 0 ? void 0 : props.memo)
-        data.description = props.memo;
-      if (props === null || props === void 0 ? void 0 : props.description_hash)
-        data.descriptionHash = props.description_hash;
-      if (!data.description && !data.descriptionHash)
+      if (props.value) data.amountMsat = props.value * 1000;
+      if (props.memo) data.description = props.memo;
+      if (props.description_hash) data.descriptionHash = props.description_hash;
+      if (!data.description && !data.descriptionHash) {
         throw Error("memo or description_hash must be supplied");
-      return this.postRequest("/createinvoice", data);
+      }
+      const response = yield this.postRequest("/createinvoice", data);
+      if (response) {
+        return (0, misc_1.mapKeys)(response, {
+          paymentHash: "r_hash",
+          serialized: "payment_request",
+        });
+      }
+      return response;
     });
   }
   subscribeInvoice(rHash) {
@@ -102,19 +145,65 @@ class Eclair extends restclient_1.default {
   }
   getPayments(props) {
     return __awaiter(this, void 0, void 0, function* () {
-      // return this.getRequest('/v1/payments', props)
+      const response = yield this.postRequest("/audit");
+      if (response) {
+        const r = {
+          payments: response.sent.map((v) => {
+            v.recipientAmountSats = v.recipientAmount / 1000;
+            v.fee_msat = 0;
+            v.parts.map((p) => {
+              v.fee_msat += p.feesPaid;
+              return p;
+            });
+            v.fee_sat = v.fee_msat / 1000;
+            return (0, misc_1.mapKeys)(v, {
+              type: "status",
+              paymentHash: "payment_hash",
+              paymentPreimage: "payment_preimage",
+              recipientAmount: "value_msat",
+              recipientAmountSats: "value_sat",
+            });
+          }),
+        };
+        return r;
+      }
+      return response;
     });
   }
   getPayment(paymentHash) {
     return __awaiter(this, void 0, void 0, function* () {
-      return this.postRequest("/getsentinfo", { paymentHash });
+      const response = yield this.postRequest("/getsentinfo", { paymentHash });
+      if (response) {
+        // TODO: This isn't ideal. Might need to map LND getPayment into an array of results instead
+        const v = response[0];
+        v.recipientAmountSats = v.recipientAmount / 1000;
+        v.status = v.status.type;
+        return {
+          result: (0, misc_1.mapKeys)(v, {
+            paymentHash: "payment_hash",
+            paymentPreimage: "payment_preimage",
+            recipientAmount: "value_msat",
+            recipientAmountSats: "value_sat",
+          }),
+        };
+      }
+      return response;
     });
   }
   sendPayment(props) {
     return __awaiter(this, void 0, void 0, function* () {
-      const data = { invoice: props.payment_request };
+      const data = { invoice: props.payment_request, blocking: true };
       // TODO: Add other eclair specific data https://acinq.github.io/eclair/#payinvoice
-      return this.postRequest("/payinvoice", data);
+      const response = yield this.postRequest("/payinvoice", data);
+      if (response) {
+        return {
+          result: (0, misc_1.mapKeys)(response, {
+            type: "status",
+            paymentHash: "payment_hash",
+          }),
+        };
+      }
+      return response;
     });
   }
 }

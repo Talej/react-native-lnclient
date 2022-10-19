@@ -52,7 +52,7 @@ class LND extends restclient_1.default {
   signRequest() {
     return {
       "Content-Type": "application/json",
-      "Grpc-Metadata-macaroon": this.config.macroon,
+      "Grpc-Metadata-macaroon": this.config.macaroon,
     };
   }
   getInfo() {
