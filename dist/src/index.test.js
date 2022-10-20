@@ -39,6 +39,15 @@ var __importDefault =
   };
 Object.defineProperty(exports, "__esModule", { value: true });
 const index_1 = __importDefault(require("./index"));
+const strToBool = (v) => {
+  if (
+    v.toLocaleLowerCase() === "true" ||
+    v.toLocaleLowerCase() === "yes" ||
+    v === "1"
+  )
+    return true;
+  return false;
+};
 const clients = [];
 for (let i = 1; process.env["LNNODE" + i + "_TYPE"]; i++) {
   const nodeType = index_1.default.getNodeType(
@@ -48,7 +57,9 @@ for (let i = 1; process.env["LNNODE" + i + "_TYPE"]; i++) {
   const nodeMacaroon = process.env["LNNODE" + i + "_MACAROON"] || false;
   const nodeUser = process.env["LNNODE" + i + "_USER"] || false;
   const nodePass = process.env["LNNODE" + i + "_PASS"] || false;
-  const config = { nodeType, host: nodeHost };
+  const noVerifySSL =
+    strToBool(process.env["LNNODE" + i + "_NOVERIFYSSL"]) || true;
+  const config = { nodeType, host: nodeHost, noVerifySSL };
   if (nodeMacaroon) {
     config.macaroon = nodeMacaroon;
   } else if (nodePass) {

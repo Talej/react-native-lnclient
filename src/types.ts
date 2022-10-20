@@ -18,6 +18,7 @@ export type nodeTypes =
 export type configProps = {
   nodeType: nodeTypes;
   host: string;
+  noVerifySSL?: boolean;
 
   /* lnd props */
   macaroon?: string;

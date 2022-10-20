@@ -1,4 +1,3 @@
-import https from 'https'
 import RESTClient from '../utils/restclient'
 import {
   NodeClient,
@@ -11,15 +10,6 @@ import {
 
 export class LND extends RESTClient implements NodeClient {
   config: configProps
-
-  constructor (config: configProps) {
-    const agent = new https.Agent({
-      rejectUnauthorized: false
-    })
-    super(config.host, agent)
-
-    this.config = config
-  }
 
   signRequest () {
     return {

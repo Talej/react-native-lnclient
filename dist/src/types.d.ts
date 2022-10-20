@@ -14,6 +14,7 @@ export declare type nodeTypes =
 export declare type configProps = {
   nodeType: nodeTypes;
   host: string;
+  noVerifySSL?: boolean;
   macaroon?: string;
   user?: string;
   pass?: string;

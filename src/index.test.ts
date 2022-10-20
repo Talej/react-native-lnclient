@@ -1,6 +1,16 @@
 import * as types from './types'
 import APIClient from './index'
 
+const strToBool = (v: string | undefined) => {
+  if (
+    typeof v === 'string' &&
+    (v.toLocaleLowerCase() === 'true' ||
+      v.toLocaleLowerCase() === 'yes' ||
+      v === '1')
+  ) { return true }
+  return false
+}
+
 const clients = []
 for (let i = 1; process.env['LNNODE' + i + '_TYPE']; i++) {
   const nodeType = APIClient.getNodeType(process.env['LNNODE' + i + '_TYPE'])
@@ -8,8 +18,9 @@ for (let i = 1; process.env['LNNODE' + i + '_TYPE']; i++) {
   const nodeMacaroon = process.env['LNNODE' + i + '_MACAROON'] || false
   const nodeUser = process.env['LNNODE' + i + '_USER'] || false
   const nodePass = process.env['LNNODE' + i + '_PASS'] || false
+  const noVerifySSL = strToBool(process.env['LNNODE' + i + '_NOVERIFYSSL'])
 
-  const config: types.configProps = { nodeType, host: nodeHost }
+  const config: types.configProps = { nodeType, host: nodeHost, noVerifySSL }
   if (nodeMacaroon) {
     config.macaroon = nodeMacaroon
   } else if (nodePass) {
@@ -89,8 +100,7 @@ describe('Invoice related tests', () => {
     )
 
     test(client.constructor.name + ': Get an existing invoice', async () => {
-      const key =
-        client.constructor.name === 'coreLightning' ? invDesc : newInv.r_hash
+      const key = client.constructor.name === 'CLN' ? invDesc : newInv.r_hash
       const response = await client.getInvoice(key)
 
       expect(response).toEqual(
@@ -187,9 +197,7 @@ describe('Payment related tests', () => {
       client.constructor.name + ': Get a single payment by payment_hash',
       async () => {
         const response = await client.getPayment(
-          client.constructor.name === 'coreLightning'
-            ? paymentRequest
-            : paymentHash
+          client.constructor.name === 'CLN' ? paymentRequest : paymentHash
         )
         expect(response).toEqual(
           expect.objectContaining({

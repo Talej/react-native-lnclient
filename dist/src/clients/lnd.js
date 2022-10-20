@@ -39,15 +39,10 @@ var __importDefault =
   };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LND = void 0;
-const https_1 = __importDefault(require("https"));
 const restclient_1 = __importDefault(require("../utils/restclient"));
 class LND extends restclient_1.default {
   constructor(config) {
-    const agent = new https_1.default.Agent({
-      rejectUnauthorized: false,
-    });
-    super(config.host, agent);
-    this.config = config;
+    super(config);
   }
   signRequest() {
     return {

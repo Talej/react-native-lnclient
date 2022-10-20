@@ -15,12 +15,6 @@ import {
 export class Eclair extends RESTClient implements NodeClient {
   config: configProps
 
-  constructor (config: configProps) {
-    super(config.host)
-
-    this.config = config
-  }
-
   signRequest () {
     return {
       'Content-Type': 'application/x-www-form-urlencoded',
@@ -102,7 +96,9 @@ export class Eclair extends RESTClient implements NodeClient {
     if (props.memo) data.description = props.memo
     if (props.description_hash) data.descriptionHash = props.description_hash
 
-    if (!data.description && !data.descriptionHash) { throw Error('memo or description_hash must be supplied') }
+    if (!data.description && !data.descriptionHash) {
+      throw Error('memo or description_hash must be supplied')
+    }
 
     const response = await this.postRequest('/createinvoice', data)
     if (response) {

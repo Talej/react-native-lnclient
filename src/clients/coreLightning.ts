@@ -1,4 +1,3 @@
-import https from 'https'
 import RESTClient from '../utils/restclient'
 import { mapKeys, toString } from '../utils/misc'
 
@@ -14,15 +13,6 @@ import {
 
 export class CLN extends RESTClient implements NodeClient {
   config: configProps
-
-  constructor (config: configProps) {
-    const agent = new https.Agent({
-      rejectUnauthorized: false
-    })
-    super(config.host, agent)
-
-    this.config = config
-  }
 
   signRequest () {
     return {
@@ -183,7 +173,9 @@ export class CLN extends RESTClient implements NodeClient {
 
     const response = await this.postRequest('/v1/pay', data)
     if (response) {
-      if (response.amount_msat) { response.amount_sat = Number(response.amount_msat) / 1000 }
+      if (response.amount_msat) {
+        response.amount_sat = Number(response.amount_msat) / 1000
+      }
 
       return {
         result: mapKeys(response, {

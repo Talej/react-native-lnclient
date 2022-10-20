@@ -43,8 +43,7 @@ const restclient_1 = __importDefault(require("../utils/restclient"));
 const misc_1 = require("../utils/misc");
 class Eclair extends restclient_1.default {
   constructor(config) {
-    super(config.host);
-    this.config = config;
+    super(config);
   }
   signRequest() {
     return {
