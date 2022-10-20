@@ -1,3 +1,3 @@
 # lnnode-client-sdk
 
-Lightning Network Node Client SDK
+React Native Lightning Network Node Client
