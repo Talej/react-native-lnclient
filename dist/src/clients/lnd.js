@@ -41,9 +41,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.LND = void 0;
 const restclient_1 = __importDefault(require("../utils/restclient"));
 class LND extends restclient_1.default {
-  constructor(config) {
-    super(config);
-  }
   signRequest() {
     return {
       "Content-Type": "application/json",

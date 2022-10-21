@@ -9,7 +9,6 @@ import {
 } from "../types";
 export declare class Eclair extends RESTClient implements NodeClient {
   config: configProps;
-  constructor(config: configProps);
   signRequest(): {
     "Content-Type": string;
     Authorization: string;

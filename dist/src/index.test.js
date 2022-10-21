@@ -41,11 +41,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const index_1 = __importDefault(require("./index"));
 const strToBool = (v) => {
   if (
-    v.toLocaleLowerCase() === "true" ||
-    v.toLocaleLowerCase() === "yes" ||
-    v === "1"
-  )
+    typeof v === "string" &&
+    (v.toLocaleLowerCase() === "true" ||
+      v.toLocaleLowerCase() === "yes" ||
+      v === "1")
+  ) {
     return true;
+  }
   return false;
 };
 const clients = [];
@@ -57,8 +59,7 @@ for (let i = 1; process.env["LNNODE" + i + "_TYPE"]; i++) {
   const nodeMacaroon = process.env["LNNODE" + i + "_MACAROON"] || false;
   const nodeUser = process.env["LNNODE" + i + "_USER"] || false;
   const nodePass = process.env["LNNODE" + i + "_PASS"] || false;
-  const noVerifySSL =
-    strToBool(process.env["LNNODE" + i + "_NOVERIFYSSL"]) || true;
+  const noVerifySSL = strToBool(process.env["LNNODE" + i + "_NOVERIFYSSL"]);
   const config = { nodeType, host: nodeHost, noVerifySSL };
   if (nodeMacaroon) {
     config.macaroon = nodeMacaroon;
@@ -133,8 +134,7 @@ describe("Invoice related tests", () => {
     );
     test(client.constructor.name + ": Get an existing invoice", () =>
       __awaiter(void 0, void 0, void 0, function* () {
-        const key =
-          client.constructor.name === "coreLightning" ? invDesc : newInv.r_hash;
+        const key = client.constructor.name === "CLN" ? invDesc : newInv.r_hash;
         const response = yield client.getInvoice(key);
         expect(response).toEqual(
           expect.objectContaining({
@@ -231,9 +231,7 @@ describe("Payment related tests", () => {
       () =>
         __awaiter(void 0, void 0, void 0, function* () {
           const response = yield client.getPayment(
-            client.constructor.name === "coreLightning"
-              ? paymentRequest
-              : paymentHash
+            client.constructor.name === "CLN" ? paymentRequest : paymentHash
           );
           expect(response).toEqual(
             expect.objectContaining({

@@ -1,13 +1,11 @@
-/// <reference types="node" />
 import { LooseObject } from "../types";
-import https from "https";
 declare type ConfigProps =
   | {
       noVerifySSL?: boolean;
     }
   | undefined;
-export default class httpClient {
-  agent: https.Agent | null;
+export default class HTTPClient {
+  config: ConfigProps;
   constructor(config: ConfigProps);
   request(
     method: "GET" | "POST",

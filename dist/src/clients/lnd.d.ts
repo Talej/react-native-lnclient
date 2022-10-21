@@ -9,7 +9,6 @@ import {
 } from "../types";
 export declare class LND extends RESTClient implements NodeClient {
   config: configProps;
-  constructor(config: configProps);
   signRequest(): {
     "Content-Type": string;
     "Grpc-Metadata-macaroon": string;

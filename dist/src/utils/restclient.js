@@ -67,7 +67,7 @@ class RESTClient {
   }
   postRequest(uri, args) {
     return __awaiter(this, void 0, void 0, function* () {
-      return this.client.post(uri, args, this.signRequest());
+      return this.client.post(this.url(uri), args, this.signRequest());
     });
   }
   isBase64(s) {

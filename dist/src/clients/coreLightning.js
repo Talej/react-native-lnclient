@@ -42,9 +42,6 @@ exports.CLN = void 0;
 const restclient_1 = __importDefault(require("../utils/restclient"));
 const misc_1 = require("../utils/misc");
 class CLN extends restclient_1.default {
-  constructor(config) {
-    super(config);
-  }
   signRequest() {
     return {
       "Content-Type": "application/json",

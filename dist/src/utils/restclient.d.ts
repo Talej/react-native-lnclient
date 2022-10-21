@@ -1,9 +1,9 @@
 import { configProps } from "../types";
-import httpClient from "./httpclient";
+import HTTPClient from "./httpclient";
 export default class RESTClient {
   config: configProps;
   host: string;
-  client: httpClient;
+  client: HTTPClient;
   constructor(config: configProps);
   signRequest(): {};
   url(uri: string, args?: object): string;
