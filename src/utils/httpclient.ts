@@ -1,9 +1,5 @@
 import { LooseObject } from '../types'
-import https from 'https'
-import { RequestInfo, RequestInit } from 'node-fetch'
-
-const fetch = (url: RequestInfo, init?: RequestInit) =>
-  import('node-fetch').then(({ default: fetch }) => fetch(url, init))
+import ReactNativeBlobUtil from 'react-native-blob-util'
 
 type ConfigProps =
   | {
@@ -12,12 +8,10 @@ type ConfigProps =
   | undefined;
 
 export default class HTTPClient {
-  agent: https.Agent | null
+  config: ConfigProps
 
   constructor (config: ConfigProps) {
-    this.agent = config?.noVerifySSL
-      ? new https.Agent({ rejectUnauthorized: false })
-      : null
+    this.config = config
   }
 
   async request (
@@ -26,26 +20,10 @@ export default class HTTPClient {
     data?: object,
     headers?: LooseObject
   ) {
-    const options: RequestInit = {
-      method,
-      headers,
-      body:
-        method === 'POST' && data
-          ? headers['Content-Type'] === 'application/json'
-            ? JSON.stringify(data)
-            : Object.entries(data)
-              .map(
-                ([key, value]) =>
-                  encodeURIComponent(key) + '=' + encodeURIComponent(value)
-              )
-              .join('&')
-          : null
-    }
-    if (this.agent) options.agent = this.agent
-
-    return await fetch(url, options)
+    return await ReactNativeBlobUtil.config({ trusty: this.config.noVerifySSL })
+      .fetch(method, url, headers, data)
       .then(async (response) => {
-        if (response.status < 300) {
+        if (response.respInfo.status < 300) {
           const data = await response.text()
           if (data.includes('\n')) {
             const parts = data.split('\n')
