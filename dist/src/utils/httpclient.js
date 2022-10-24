@@ -64,8 +64,13 @@ class HTTPClient {
                 return JSON.parse(data);
               } else {
                 return response.json().then((err) => {
+                  var _a;
                   if (
-                    err === null || err === void 0 ? void 0 : err.error.message
+                    (_a =
+                      err === null || err === void 0 ? void 0 : err.error) ===
+                      null || _a === void 0
+                      ? void 0
+                      : _a.message
                   ) {
                     throw Error(err.error.message);
                   } else if (err.error || err.message) {
@@ -115,8 +120,13 @@ class HTTPClient {
                 return JSON.parse(data);
               } else {
                 return response.json().then((err) => {
+                  var _a;
                   if (
-                    err === null || err === void 0 ? void 0 : err.error.message
+                    (_a =
+                      err === null || err === void 0 ? void 0 : err.error) ===
+                      null || _a === void 0
+                      ? void 0
+                      : _a.message
                   ) {
                     throw Error(err.error.message);
                   } else if (err.error || err.message) {

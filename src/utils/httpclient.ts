@@ -49,7 +49,7 @@ export default class HTTPClient {
             return JSON.parse(data)
           } else {
             return response.json().then((err) => {
-              if (err?.error.message) {
+              if (err?.error?.message) {
                 throw Error(err.error.message)
               } else if (err.error || err.message) {
                 throw Error(err.error || err.message)
@@ -92,7 +92,7 @@ export default class HTTPClient {
             return JSON.parse(data)
           } else {
             return response.json().then((err) => {
-              if (err?.error.message) {
+              if (err?.error?.message) {
                 throw Error(err.error.message)
               } else if (err.error || err.message) {
                 throw Error(err.error || err.message)
