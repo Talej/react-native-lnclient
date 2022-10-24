@@ -29,7 +29,10 @@ export default class RESTClient {
       })
     }
 
-    return url.href
+    // URL is adding trailing slash. This upsets LND so we'll strip it if it wasn't intentional
+    let s = url.href
+    if (uri.substring(-1) === '/') s = s.replace(/\/+$/, '')
+    return s
   }
 
   async getRequest (uri: string, args?: object) {
