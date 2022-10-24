@@ -9,7 +9,11 @@ export default class RESTClient {
   constructor (config: configProps) {
     this.config = config
     this.host = config.host
-    this.client = new HTTPClient({ noVerifySSL: config?.noVerifySSL })
+    this.client = new HTTPClient({
+      noVerifySSL: config?.noVerifySSL,
+      useFetch: config?.useFetch,
+      proxy: config?.proxy
+    })
   }
 
   signRequest () {
