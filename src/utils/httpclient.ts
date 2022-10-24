@@ -29,7 +29,9 @@ export default class HTTPClient {
   ) {
     if (this.config.proxy) {
       headers['X-Proxy-Target-URL'] = url
-      if (this.config.proxyAuth) { headers['X-Proxy-Auth'] = this.config.proxyAuth }
+      if (this.config.proxyAuth) {
+        headers['X-Proxy-Auth'] = this.config.proxyAuth
+      }
       url = this.config.proxy
     }
     if (this.blobUtil) {
@@ -47,7 +49,7 @@ export default class HTTPClient {
             return JSON.parse(data)
           } else {
             return response.json().then((err) => {
-              if (err.error.message) {
+              if (err?.error.message) {
                 throw Error(err.error.message)
               } else if (err.error || err.message) {
                 throw Error(err.error || err.message)
@@ -90,7 +92,7 @@ export default class HTTPClient {
             return JSON.parse(data)
           } else {
             return response.json().then((err) => {
-              if (err.error.message) {
+              if (err?.error.message) {
                 throw Error(err.error.message)
               } else if (err.error || err.message) {
                 throw Error(err.error || err.message)

@@ -64,7 +64,9 @@ class HTTPClient {
                 return JSON.parse(data);
               } else {
                 return response.json().then((err) => {
-                  if (err.error.message) {
+                  if (
+                    err === null || err === void 0 ? void 0 : err.error.message
+                  ) {
                     throw Error(err.error.message);
                   } else if (err.error || err.message) {
                     throw Error(err.error || err.message);
@@ -113,7 +115,9 @@ class HTTPClient {
                 return JSON.parse(data);
               } else {
                 return response.json().then((err) => {
-                  if (err.error.message) {
+                  if (
+                    err === null || err === void 0 ? void 0 : err.error.message
+                  ) {
                     throw Error(err.error.message);
                   } else if (err.error || err.message) {
                     throw Error(err.error || err.message);
