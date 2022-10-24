@@ -48,6 +48,8 @@ class RESTClient {
         config === null || config === void 0 ? void 0 : config.noVerifySSL,
       useFetch: config === null || config === void 0 ? void 0 : config.useFetch,
       proxy: config === null || config === void 0 ? void 0 : config.proxy,
+      proxyAuth:
+        config === null || config === void 0 ? void 0 : config.proxyAuth,
     });
   }
   signRequest() {

@@ -12,7 +12,8 @@ export default class RESTClient {
     this.client = new HTTPClient({
       noVerifySSL: config?.noVerifySSL,
       useFetch: config?.useFetch,
-      proxy: config?.proxy
+      proxy: config?.proxy,
+      proxyAuth: config?.proxyAuth
     })
   }
 
