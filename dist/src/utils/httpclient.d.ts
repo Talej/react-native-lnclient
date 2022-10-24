@@ -2,10 +2,14 @@ import { LooseObject } from "../types";
 declare type ConfigProps =
   | {
       noVerifySSL?: boolean;
+      useFetch?: boolean;
+      proxy?: string;
+      proxyAuth?: string;
     }
   | undefined;
 export default class HTTPClient {
   config: ConfigProps;
+  blobUtil: any;
   constructor(config: ConfigProps);
   request(
     method: "GET" | "POST",

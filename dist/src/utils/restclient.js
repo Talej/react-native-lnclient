@@ -46,6 +46,8 @@ class RESTClient {
     this.client = new httpclient_1.default({
       noVerifySSL:
         config === null || config === void 0 ? void 0 : config.noVerifySSL,
+      useFetch: config === null || config === void 0 ? void 0 : config.useFetch,
+      proxy: config === null || config === void 0 ? void 0 : config.proxy,
     });
   }
   signRequest() {
