@@ -1,5 +1,6 @@
 import { configProps } from '../types'
 import HTTPClient from './httpclient'
+import { Buffer } from 'buffer'
 
 export default class RESTClient {
   config: configProps

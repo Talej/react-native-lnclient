@@ -1,3 +1,4 @@
+import { Buffer } from 'buffer'
 import RESTClient from '../utils/restclient'
 import {
   NodeClient,

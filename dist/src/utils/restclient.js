@@ -39,6 +39,7 @@ var __importDefault =
   };
 Object.defineProperty(exports, "__esModule", { value: true });
 const httpclient_1 = __importDefault(require("./httpclient"));
+const buffer_1 = require("buffer");
 class RESTClient {
   constructor(config) {
     this.config = config;
@@ -78,7 +79,7 @@ class RESTClient {
     });
   }
   isBase64(s) {
-    return s === Buffer.from(s, "base64").toString("base64");
+    return s === buffer_1.Buffer.from(s, "base64").toString("base64");
   }
 }
 exports.default = RESTClient;
