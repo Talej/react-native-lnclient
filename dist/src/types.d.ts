@@ -18,6 +18,9 @@ export declare type configProps = {
   macaroon?: string;
   user?: string;
   pass?: string;
+  useFetch?: boolean;
+  proxy?: string;
+  proxyAuth?: string;
 };
 export interface ResponseObject {
   [key: string]: any;

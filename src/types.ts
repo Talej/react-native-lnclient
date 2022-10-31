@@ -26,6 +26,11 @@ export type configProps = {
   /* eclair props */
   user?: string;
   pass?: string;
+
+  /* if set to true use RN fetch, otherwise use blob util */
+  useFetch?: boolean;
+  proxy?: string;
+  proxyAuth?: string;
 };
 
 export interface ResponseObject {
