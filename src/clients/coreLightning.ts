@@ -194,4 +194,15 @@ export class CLN extends RESTClient implements NodeClient {
     // TODO: first use /network/getRoute then loop over each channel and use /network/listChannel
     return { fee_sats: 0 }
   }
+
+  async decodePayReq (payReq: string) {
+    const response = this.postRequest('/utility/decode', { invoice: payReq })
+    if (response) {
+      return mapKeys(response, {
+        node_id: 'destination'
+      })
+    }
+
+    return response
+  }
 }

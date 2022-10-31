@@ -69,4 +69,8 @@ export class LND extends RESTClient implements NodeClient {
       }
     )
   }
+
+  async decodePayReq (payReq: string) {
+    return this.getRequest(`/v1/payreq/${payReq}`)
+  }
 }

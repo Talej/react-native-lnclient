@@ -104,6 +104,11 @@ class LND extends restclient_1.default {
       );
     });
   }
+  decodePayReq(payReq) {
+    return __awaiter(this, void 0, void 0, function* () {
+      return this.getRequest(`/v1/payreq/${payReq}`);
+    });
+  }
 }
 exports.LND = LND;
 //# sourceMappingURL=lnd.js.map

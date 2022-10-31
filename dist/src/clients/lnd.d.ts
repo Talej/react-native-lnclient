@@ -25,4 +25,5 @@ export declare class LND extends RESTClient implements NodeClient {
   estimateFee(props: estimateFeeProps): Promise<{
     fee_sats: number;
   }>;
+  decodePayReq(payReq: string): Promise<any>;
 }

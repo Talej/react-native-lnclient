@@ -207,6 +207,17 @@ class Eclair extends restclient_1.default {
       return { fee_sats: 0 };
     });
   }
+  decodePayReq(payReq) {
+    return __awaiter(this, void 0, void 0, function* () {
+      const response = this.postRequest("/parseinvoice", { invoice: payReq });
+      if (response) {
+        return (0, misc_1.mapKeys)(response, {
+          nodeId: "destination",
+        });
+      }
+      return response;
+    });
+  }
 }
 exports.Eclair = Eclair;
 //# sourceMappingURL=eclair.js.map

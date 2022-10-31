@@ -186,4 +186,15 @@ export class Eclair extends RESTClient implements NodeClient {
   async estimateFee (props: estimateFeeProps) {
     return { fee_sats: 0 }
   }
+
+  async decodePayReq (payReq: string) {
+    const response = this.postRequest('/parseinvoice', { invoice: payReq })
+    if (response) {
+      return mapKeys(response, {
+        nodeId: 'destination'
+      })
+    }
+
+    return response
+  }
 }

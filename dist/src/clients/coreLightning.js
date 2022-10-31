@@ -213,6 +213,17 @@ class CLN extends restclient_1.default {
       return { fee_sats: 0 };
     });
   }
+  decodePayReq(payReq) {
+    return __awaiter(this, void 0, void 0, function* () {
+      const response = this.postRequest("/utility/decode", { invoice: payReq });
+      if (response) {
+        return (0, misc_1.mapKeys)(response, {
+          node_id: "destination",
+        });
+      }
+      return response;
+    });
+  }
 }
 exports.CLN = CLN;
 //# sourceMappingURL=coreLightning.js.map
