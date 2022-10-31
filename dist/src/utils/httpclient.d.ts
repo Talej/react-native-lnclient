@@ -1,20 +1,18 @@
+/// <reference types="node" />
 import { LooseObject } from "../types";
+import https from "https";
 declare type ConfigProps =
   | {
       noVerifySSL?: boolean;
-      useFetch?: boolean;
-      proxy?: string;
-      proxyAuth?: string;
     }
   | undefined;
 export default class HTTPClient {
-  config: ConfigProps;
-  blobUtil: any;
+  agent: https.Agent | null;
   constructor(config: ConfigProps);
   request(
     method: "GET" | "POST",
     url: string,
-    data?: object,
+    data?: LooseObject,
     headers?: LooseObject
   ): Promise<any>;
   get(url: string, headers?: LooseObject): Promise<any>;

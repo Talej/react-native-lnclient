@@ -39,7 +39,6 @@ var __importDefault =
   };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Eclair = void 0;
-const buffer_1 = require("buffer");
 const restclient_1 = __importDefault(require("../utils/restclient"));
 const misc_1 = require("../utils/misc");
 class Eclair extends restclient_1.default {
@@ -47,8 +46,7 @@ class Eclair extends restclient_1.default {
     return {
       "Content-Type": "application/x-www-form-urlencoded",
       Authorization:
-        "Basic " +
-        buffer_1.Buffer.from(":" + this.config.pass).toString("base64"),
+        "Basic " + Buffer.from(":" + this.config.pass).toString("base64"),
     };
   }
   getInfo() {
@@ -202,6 +200,11 @@ class Eclair extends restclient_1.default {
         };
       }
       return response;
+    });
+  }
+  estimateFee(props) {
+    return __awaiter(this, void 0, void 0, function* () {
+      return { fee_sats: 0 };
     });
   }
 }

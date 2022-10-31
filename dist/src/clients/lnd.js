@@ -39,7 +39,6 @@ var __importDefault =
   };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LND = void 0;
-const buffer_1 = require("buffer");
 const restclient_1 = __importDefault(require("../utils/restclient"));
 class LND extends restclient_1.default {
   signRequest() {
@@ -61,7 +60,7 @@ class LND extends restclient_1.default {
   getInvoice(rHash) {
     return __awaiter(this, void 0, void 0, function* () {
       const d = this.isBase64(rHash)
-        ? buffer_1.Buffer.from(rHash, "base64").toString("hex")
+        ? Buffer.from(rHash, "base64").toString("hex")
         : rHash;
       return this.getRequest(`/v1/invoice/${d}`);
     });
@@ -83,7 +82,7 @@ class LND extends restclient_1.default {
   }
   getPayment(paymentHash) {
     return __awaiter(this, void 0, void 0, function* () {
-      const d = buffer_1.Buffer.from(paymentHash, "hex").toString("base64");
+      const d = Buffer.from(paymentHash, "hex").toString("base64");
       return this.getRequest(`/v2/router/track/${d}`);
     });
   }
@@ -91,6 +90,18 @@ class LND extends restclient_1.default {
     return __awaiter(this, void 0, void 0, function* () {
       if (!props.timeout_seconds) props.timeout_seconds = 30;
       return this.postRequest("/v2/router/send", props);
+    });
+  }
+  estimateFee(props) {
+    return __awaiter(this, void 0, void 0, function* () {
+      props.dest = Buffer.from(props.dest, "hex").toString("base64");
+      return this.postRequest("/v2/router/route/estimatefee", props).then(
+        (res) => {
+          if (res.routing_fee_msat) {
+            return { fee_sats: res.routing_fee_msat / 1000 };
+          }
+        }
+      );
     });
   }
 }

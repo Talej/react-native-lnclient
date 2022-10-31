@@ -1,4 +1,3 @@
-import { Buffer } from 'buffer'
 import RESTClient from '../utils/restclient'
 import {
   NodeClient,
@@ -6,7 +5,8 @@ import {
   getInvoicesProps,
   createInvoiceProps,
   getPaymentsProps,
-  sendPaymentProps
+  sendPaymentProps,
+  estimateFeeProps
 } from '../types'
 
 export class LND extends RESTClient implements NodeClient {
@@ -57,5 +57,16 @@ export class LND extends RESTClient implements NodeClient {
     if (!props.timeout_seconds) props.timeout_seconds = 30
 
     return this.postRequest('/v2/router/send', props)
+  }
+
+  async estimateFee (props: estimateFeeProps) {
+    props.dest = Buffer.from(props.dest, 'hex').toString('base64')
+    return this.postRequest('/v2/router/route/estimatefee', props).then(
+      (res) => {
+        if (res.routing_fee_msat) {
+          return { fee_sats: res.routing_fee_msat / 1000 }
+        }
+      }
+    )
   }
 }

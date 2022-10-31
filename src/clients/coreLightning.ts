@@ -8,7 +8,8 @@ import {
   createInvoiceProps,
   getPaymentsProps,
   sendPaymentProps,
-  LooseObject
+  LooseObject,
+  estimateFeeProps
 } from '../types'
 
 export class CLN extends RESTClient implements NodeClient {
@@ -187,5 +188,10 @@ export class CLN extends RESTClient implements NodeClient {
     }
 
     return response
+  }
+
+  async estimateFee (props: estimateFeeProps) {
+    // TODO: first use /network/getRoute then loop over each channel and use /network/listChannel
+    return { fee_sats: 0 }
   }
 }

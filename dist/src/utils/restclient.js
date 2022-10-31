@@ -39,7 +39,6 @@ var __importDefault =
   };
 Object.defineProperty(exports, "__esModule", { value: true });
 const httpclient_1 = __importDefault(require("./httpclient"));
-const buffer_1 = require("buffer");
 class RESTClient {
   constructor(config) {
     this.config = config;
@@ -47,10 +46,6 @@ class RESTClient {
     this.client = new httpclient_1.default({
       noVerifySSL:
         config === null || config === void 0 ? void 0 : config.noVerifySSL,
-      useFetch: config === null || config === void 0 ? void 0 : config.useFetch,
-      proxy: config === null || config === void 0 ? void 0 : config.proxy,
-      proxyAuth:
-        config === null || config === void 0 ? void 0 : config.proxyAuth,
     });
   }
   signRequest() {
@@ -79,7 +74,7 @@ class RESTClient {
     });
   }
   isBase64(s) {
-    return s === buffer_1.Buffer.from(s, "base64").toString("base64");
+    return s === Buffer.from(s, "base64").toString("base64");
   }
 }
 exports.default = RESTClient;

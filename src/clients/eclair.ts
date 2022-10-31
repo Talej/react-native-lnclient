@@ -1,4 +1,3 @@
-import { Buffer } from 'buffer'
 import RESTClient from '../utils/restclient'
 import { mapKeys, toString } from '../utils/misc'
 
@@ -10,7 +9,8 @@ import {
   eclairCreateInvoiceProps,
   getPaymentsProps,
   sendPaymentProps,
-  LooseObject
+  LooseObject,
+  estimateFeeProps
 } from '../types'
 
 export class Eclair extends RESTClient implements NodeClient {
@@ -181,5 +181,9 @@ export class Eclair extends RESTClient implements NodeClient {
     }
 
     return response
+  }
+
+  async estimateFee (props: estimateFeeProps) {
+    return { fee_sats: 0 }
   }
 }

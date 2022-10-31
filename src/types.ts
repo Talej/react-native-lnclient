@@ -26,11 +26,6 @@ export type configProps = {
   /* eclair props */
   user?: string;
   pass?: string;
-
-  /* if set to true use RN fetch, otherwise use blob util */
-  useFetch?: boolean;
-  proxy?: string;
-  proxyAuth?: string;
 };
 
 export interface ResponseObject {
@@ -60,6 +55,7 @@ export type eclairCreateInvoiceProps = {
   description?: string;
   descriptionHash?: string;
 };
+
 export type getPaymentsProps = {
   include_incomplete?: boolean;
   index_offset?: string;
@@ -75,6 +71,11 @@ type sendPaymentType = {
   payment_hash?: string;
   timeout_seconds?: number;
   allow_self_payment?: boolean;
+};
+
+export type estimateFeeProps = {
+  dest: string;
+  amt_sat: number;
 };
 
 export type sendPaymentProps = sendPaymentType;

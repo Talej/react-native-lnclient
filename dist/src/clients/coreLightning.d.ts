@@ -6,6 +6,7 @@ import {
   createInvoiceProps,
   getPaymentsProps,
   sendPaymentProps,
+  estimateFeeProps,
 } from "../types";
 export declare class CLN extends RESTClient implements NodeClient {
   config: configProps;
@@ -22,4 +23,7 @@ export declare class CLN extends RESTClient implements NodeClient {
   getPayments(props?: getPaymentsProps): Promise<any>;
   getPayment(paymentRequest: string): Promise<any>;
   sendPayment(props: sendPaymentProps): Promise<any>;
+  estimateFee(props: estimateFeeProps): Promise<{
+    fee_sats: number;
+  }>;
 }

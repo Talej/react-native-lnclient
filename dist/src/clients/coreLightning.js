@@ -207,6 +207,12 @@ class CLN extends restclient_1.default {
       return response;
     });
   }
+  estimateFee(props) {
+    return __awaiter(this, void 0, void 0, function* () {
+      // TODO: first use /network/getRoute then loop over each channel and use /network/listChannel
+      return { fee_sats: 0 };
+    });
+  }
 }
 exports.CLN = CLN;
 //# sourceMappingURL=coreLightning.js.map

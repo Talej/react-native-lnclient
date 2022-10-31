@@ -18,9 +18,6 @@ export declare type configProps = {
   macaroon?: string;
   user?: string;
   pass?: string;
-  useFetch?: boolean;
-  proxy?: string;
-  proxyAuth?: string;
 };
 export interface ResponseObject {
   [key: string]: any;
@@ -57,6 +54,10 @@ declare type sendPaymentType = {
   payment_hash?: string;
   timeout_seconds?: number;
   allow_self_payment?: boolean;
+};
+export declare type estimateFeeProps = {
+  dest: string;
+  amt_sat: number;
 };
 export declare type sendPaymentProps = sendPaymentType;
 export interface NodeClient {

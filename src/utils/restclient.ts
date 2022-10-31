@@ -1,6 +1,5 @@
 import { configProps } from '../types'
 import HTTPClient from './httpclient'
-import { Buffer } from 'buffer'
 
 export default class RESTClient {
   config: configProps
@@ -10,12 +9,7 @@ export default class RESTClient {
   constructor (config: configProps) {
     this.config = config
     this.host = config.host
-    this.client = new HTTPClient({
-      noVerifySSL: config?.noVerifySSL,
-      useFetch: config?.useFetch,
-      proxy: config?.proxy,
-      proxyAuth: config?.proxyAuth
-    })
+    this.client = new HTTPClient({ noVerifySSL: config?.noVerifySSL })
   }
 
   signRequest () {
