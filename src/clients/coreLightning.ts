@@ -191,15 +191,25 @@ export class CLN extends RESTClient implements NodeClient {
   }
 
   async estimateFee (props: estimateFeeProps) {
-    // TODO: first use /network/getRoute then loop over each channel and use /network/listChannel
+    const response = await this.getRequest(
+      `/v1/network/getRoute/${props.dest}/${props.amt_sat}`
+    )
+    if (response && response.route && response.route.length > 1) {
+      const first = response.route.at(0)
+      const last = response.route.at(-1)
+      const fee = (last.msatoshi - first.msatoshi) / 1000
+
+      return { fee_sats: fee }
+    }
+
     return { fee_sats: 0 }
   }
 
   async decodePayReq (payReq: string) {
-    const response = this.postRequest('/utility/decode', { invoice: payReq })
+    const response = await this.getRequest(`/v1/pay/decodePay/${payReq}`)
     if (response) {
       return mapKeys(response, {
-        node_id: 'destination'
+        payee: 'destination'
       })
     }
 

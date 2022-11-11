@@ -185,11 +185,37 @@ export class Eclair extends RESTClient implements NodeClient {
   }
 
   async estimateFee (props: estimateFeeProps) {
+    const response = await this.postRequest('/findroutetonode', {
+      nodeId: props.dest,
+      amountMsat: props.amt_sat,
+      format: 'full'
+    })
+    console.log('response', response.routes[0].hops)
+    if (
+      response &&
+      response.routes &&
+      response.routes[0].hops &&
+      response.routes[0].hops.length > 1
+    ) {
+      let fee = 0
+      response.routes[0].hops.forEach((hop) => {
+        // calculate fee in sats
+        fee +=
+          hop.feeBaseMsat +
+          (hop.feeProportionalMillionths * response.routes[0].amount) /
+            1000000 /
+            1000
+      })
+
+      return { fee_sats: fee }
+    }
     return { fee_sats: 0 }
   }
 
   async decodePayReq (payReq: string) {
-    const response = this.postRequest('/parseinvoice', { invoice: payReq })
+    const response = await this.postRequest('/parseinvoice', {
+      invoice: payReq
+    })
     if (response) {
       return mapKeys(response, {
         nodeId: 'destination'

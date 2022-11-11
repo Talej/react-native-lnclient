@@ -206,12 +206,37 @@ class Eclair extends restclient_1.default {
   }
   estimateFee(props) {
     return __awaiter(this, void 0, void 0, function* () {
+      const response = yield this.postRequest("/findroutetonode", {
+        nodeId: props.dest,
+        amountMsat: props.amt_sat,
+        format: "full",
+      });
+      console.log("response", response.routes[0].hops);
+      if (
+        response &&
+        response.routes &&
+        response.routes[0].hops &&
+        response.routes[0].hops.length > 1
+      ) {
+        let fee = 0;
+        response.routes[0].hops.forEach((hop) => {
+          // calculate fee in sats
+          fee +=
+            hop.feeBaseMsat +
+            (hop.feeProportionalMillionths * response.routes[0].amount) /
+              1000000 /
+              1000;
+        });
+        return { fee_sats: fee };
+      }
       return { fee_sats: 0 };
     });
   }
   decodePayReq(payReq) {
     return __awaiter(this, void 0, void 0, function* () {
-      const response = this.postRequest("/parseinvoice", { invoice: payReq });
+      const response = yield this.postRequest("/parseinvoice", {
+        invoice: payReq,
+      });
       if (response) {
         return (0, misc_1.mapKeys)(response, {
           nodeId: "destination",

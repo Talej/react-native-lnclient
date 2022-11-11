@@ -72,5 +72,7 @@ export interface NodeClient {
   getPayments(props?: getPaymentsProps): ResponseObject;
   getPayment(paymentHash: string): ResponseObject;
   sendPayment(props: sendPaymentProps): ResponseObject;
+  estimateFee(props: estimateFeeProps): ResponseObject;
+  decodePayReq(payReq: string): ResponseObject;
 }
 export {};

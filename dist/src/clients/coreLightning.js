@@ -209,16 +209,24 @@ class CLN extends restclient_1.default {
   }
   estimateFee(props) {
     return __awaiter(this, void 0, void 0, function* () {
-      // TODO: first use /network/getRoute then loop over each channel and use /network/listChannel
+      const response = yield this.getRequest(
+        `/v1/network/getRoute/${props.dest}/${props.amt_sat}`
+      );
+      if (response && response.route && response.route.length > 1) {
+        const first = response.route.at(0);
+        const last = response.route.at(-1);
+        const fee = (last.msatoshi - first.msatoshi) / 1000;
+        return { fee_sats: fee };
+      }
       return { fee_sats: 0 };
     });
   }
   decodePayReq(payReq) {
     return __awaiter(this, void 0, void 0, function* () {
-      const response = this.postRequest("/utility/decode", { invoice: payReq });
+      const response = yield this.getRequest(`/v1/pay/decodePay/${payReq}`);
       if (response) {
         return (0, misc_1.mapKeys)(response, {
-          node_id: "destination",
+          payee: "destination",
         });
       }
       return response;
