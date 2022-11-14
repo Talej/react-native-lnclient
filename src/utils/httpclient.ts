@@ -41,24 +41,30 @@ export default class HTTPClient {
     }
     if (this.tor) {
       await this.tor.startIfNotStarted()
-      if (method === 'GET') {
-        const response = this.tor.get(url, headers, this.config.noVerifySSL)
-        if (response.json) {
-          return response.json
+      try {
+        if (method === 'GET') {
+          const response = await this.tor.get(
+            url,
+            headers,
+            this.config.noVerifySSL
+          )
+          if (response.json) {
+            return response.json
+          }
+        } else if (method === 'POST') {
+          const response = await this.tor.post(
+            url,
+            headers['Content-Type'] === 'application/json'
+              ? JSON.stringify(data)
+              : data,
+            headers,
+            this.config.noVerifySSL
+          )
+          if (response.json) {
+            return response.json
+          }
         }
-      } else if (method === 'POST') {
-        const response = this.tor.post(
-          url,
-          headers['Content-Type'] === 'application/json'
-            ? JSON.stringify(data)
-            : data,
-          headers,
-          this.config.noVerifySSL
-        )
-        if (response.json) {
-          return response.json
-        }
-      }
+      } catch (e) {}
 
       return false
     } else if (this.blobUtil) {

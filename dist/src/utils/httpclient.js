@@ -61,24 +61,30 @@ class HTTPClient {
       }
       if (this.tor) {
         yield this.tor.startIfNotStarted();
-        if (method === "GET") {
-          const response = this.tor.get(url, headers, this.config.noVerifySSL);
-          if (response.json) {
-            return response.json;
+        try {
+          if (method === "GET") {
+            const response = yield this.tor.get(
+              url,
+              headers,
+              this.config.noVerifySSL
+            );
+            if (response.json) {
+              return response.json;
+            }
+          } else if (method === "POST") {
+            const response = yield this.tor.post(
+              url,
+              headers["Content-Type"] === "application/json"
+                ? JSON.stringify(data)
+                : data,
+              headers,
+              this.config.noVerifySSL
+            );
+            if (response.json) {
+              return response.json;
+            }
           }
-        } else if (method === "POST") {
-          const response = this.tor.post(
-            url,
-            headers["Content-Type"] === "application/json"
-              ? JSON.stringify(data)
-              : data,
-            headers,
-            this.config.noVerifySSL
-          );
-          if (response.json) {
-            return response.json;
-          }
-        }
+        } catch (e) {}
         return false;
       } else if (this.blobUtil) {
         return yield this.blobUtil
