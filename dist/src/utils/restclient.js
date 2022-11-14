@@ -48,6 +48,7 @@ class RESTClient {
       noVerifySSL:
         config === null || config === void 0 ? void 0 : config.noVerifySSL,
       useFetch: config === null || config === void 0 ? void 0 : config.useFetch,
+      useTor: !!config.host.match(/\.onion(:[0-9]+)?$/),
       proxy: config === null || config === void 0 ? void 0 : config.proxy,
       proxyAuth:
         config === null || config === void 0 ? void 0 : config.proxyAuth,

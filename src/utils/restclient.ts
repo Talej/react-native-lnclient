@@ -13,6 +13,7 @@ export default class RESTClient {
     this.client = new HTTPClient({
       noVerifySSL: config?.noVerifySSL,
       useFetch: config?.useFetch,
+      useTor: !!config.host.match(/\.onion(:[0-9]+)?$/),
       proxy: config?.proxy,
       proxyAuth: config?.proxyAuth
     })

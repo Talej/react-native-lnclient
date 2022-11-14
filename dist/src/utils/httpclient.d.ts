@@ -3,6 +3,7 @@ declare type ConfigProps =
   | {
       noVerifySSL?: boolean;
       useFetch?: boolean;
+      useTor?: boolean;
       proxy?: string;
       proxyAuth?: string;
     }
@@ -10,6 +11,7 @@ declare type ConfigProps =
 export default class HTTPClient {
   config: ConfigProps;
   blobUtil: any;
+  tor: any;
   constructor(config: ConfigProps);
   request(
     method: "GET" | "POST",

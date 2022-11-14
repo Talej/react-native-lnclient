@@ -1,9 +1,11 @@
 import { LooseObject } from '../types'
+import Tor from 'react-native-tor'
 
 type ConfigProps =
   | {
       noVerifySSL?: boolean;
       useFetch?: boolean;
+      useTor?: boolean;
       proxy?: string;
       proxyAuth?: string;
     }
@@ -12,11 +14,14 @@ type ConfigProps =
 export default class HTTPClient {
   config: ConfigProps
   blobUtil: any
+  tor: any
 
   constructor (config: ConfigProps) {
     this.config = config
 
-    if (!config?.useFetch) {
+    if (config?.useTor) {
+      this.tor = Tor
+    } else if (!config?.useFetch) {
       this.blobUtil = require('react-native-blob-util').default
     }
   }
@@ -34,7 +39,29 @@ export default class HTTPClient {
       }
       url = this.config.proxy
     }
-    if (this.blobUtil) {
+    if (this.tor) {
+      await this.tor.startIfNotStarted()
+      if (method === 'GET') {
+        const response = this.tor.get(url, headers, this.config.noVerifySSL)
+        if (response.json) {
+          return response.json
+        }
+      } else if (method === 'POST') {
+        const response = this.tor.post(
+          url,
+          headers['Content-Type'] === 'application/json'
+            ? JSON.stringify(data)
+            : data,
+          headers,
+          this.config.noVerifySSL
+        )
+        if (response.json) {
+          return response.json
+        }
+      }
+
+      return false
+    } else if (this.blobUtil) {
       return await this.blobUtil
         .config({ trusty: this.config.noVerifySSL })
         .fetch(method, url, headers, data)

@@ -32,11 +32,21 @@ var __awaiter =
       step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
   };
+var __importDefault =
+  (this && this.__importDefault) ||
+  function (mod) {
+    return mod && mod.__esModule ? mod : { default: mod };
+  };
 Object.defineProperty(exports, "__esModule", { value: true });
+const react_native_tor_1 = __importDefault(require("react-native-tor"));
 class HTTPClient {
   constructor(config) {
     this.config = config;
-    if (!(config === null || config === void 0 ? void 0 : config.useFetch)) {
+    if (config === null || config === void 0 ? void 0 : config.useTor) {
+      this.tor = react_native_tor_1.default;
+    } else if (
+      !(config === null || config === void 0 ? void 0 : config.useFetch)
+    ) {
       this.blobUtil = require("react-native-blob-util").default;
     }
   }
@@ -49,7 +59,28 @@ class HTTPClient {
         }
         url = this.config.proxy;
       }
-      if (this.blobUtil) {
+      if (this.tor) {
+        yield this.tor.startIfNotStarted();
+        if (method === "GET") {
+          const response = this.tor.get(url, headers, this.config.noVerifySSL);
+          if (response.json) {
+            return response.json;
+          }
+        } else if (method === "POST") {
+          const response = this.tor.post(
+            url,
+            headers["Content-Type"] === "application/json"
+              ? JSON.stringify(data)
+              : data,
+            headers,
+            this.config.noVerifySSL
+          );
+          if (response.json) {
+            return response.json;
+          }
+        }
+        return false;
+      } else if (this.blobUtil) {
         return yield this.blobUtil
           .config({ trusty: this.config.noVerifySSL })
           .fetch(method, url, headers, data)
