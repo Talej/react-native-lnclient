@@ -20,7 +20,7 @@ export default class HTTPClient {
     this.config = config
 
     if (config?.useTor) {
-      this.tor = Tor
+      this.tor = Tor()
     } else if (!config?.useFetch) {
       this.blobUtil = require('react-native-blob-util').default
     }

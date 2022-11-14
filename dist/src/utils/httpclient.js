@@ -43,7 +43,7 @@ class HTTPClient {
   constructor(config) {
     this.config = config;
     if (config === null || config === void 0 ? void 0 : config.useTor) {
-      this.tor = react_native_tor_1.default;
+      this.tor = (0, react_native_tor_1.default)();
     } else if (
       !(config === null || config === void 0 ? void 0 : config.useFetch)
     ) {
