@@ -40,6 +40,7 @@ export default class HTTPClient {
       url = this.config.proxy
     }
     if (this.tor) {
+      await this.tor.stopifRunning()
       await this.tor.startIfNotStarted()
       try {
         if (method === 'GET') {

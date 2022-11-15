@@ -60,6 +60,7 @@ class HTTPClient {
         url = this.config.proxy;
       }
       if (this.tor) {
+        yield this.tor.stopifRunning();
         yield this.tor.startIfNotStarted();
         try {
           if (method === "GET") {
