@@ -71,7 +71,14 @@ export default class HTTPClient {
     } else if (this.blobUtil) {
       return await this.blobUtil
         .config({ trusty: this.config.noVerifySSL })
-        .fetch(method, url, headers, data)
+        .fetch(
+          method,
+          url,
+          headers,
+          headers['Content-Type'] === 'application/json'
+            ? JSON.stringify(data)
+            : data
+        )
         .then(async (response) => {
           if (response.respInfo.status < 300) {
             const data = await response.text()

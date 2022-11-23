@@ -90,7 +90,14 @@ class HTTPClient {
       } else if (this.blobUtil) {
         return yield this.blobUtil
           .config({ trusty: this.config.noVerifySSL })
-          .fetch(method, url, headers, data)
+          .fetch(
+            method,
+            url,
+            headers,
+            headers["Content-Type"] === "application/json"
+              ? JSON.stringify(data)
+              : data
+          )
           .then((response) =>
             __awaiter(this, void 0, void 0, function* () {
               if (response.respInfo.status < 300) {
