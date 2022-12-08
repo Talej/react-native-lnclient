@@ -1,5 +1,7 @@
 import { LooseObject } from '../types'
-import Tor from 'react-native-tor'
+import TorBridge from 'react-native-tor'
+
+const tor = TorBridge()
 
 type ConfigProps =
   | {
@@ -20,7 +22,7 @@ export default class HTTPClient {
     this.config = config
 
     if (config?.useTor) {
-      this.tor = Tor()
+      this.tor = tor
     } else if (!config?.useFetch) {
       this.blobUtil = require('react-native-blob-util').default
     }
@@ -40,9 +42,9 @@ export default class HTTPClient {
       url = this.config.proxy
     }
     if (this.tor) {
-      await this.tor.stopIfRunning()
-      await this.tor.startIfNotStarted()
       try {
+        await this.tor.startIfNotStarted()
+
         if (method === 'GET') {
           const response = await this.tor.get(
             url,
@@ -65,7 +67,9 @@ export default class HTTPClient {
             return response.json
           }
         }
-      } catch (e) {}
+      } catch (e) {
+        this.tor.stopIfRunning()
+      }
 
       return false
     } else if (this.blobUtil) {

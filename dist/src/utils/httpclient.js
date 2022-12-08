@@ -39,11 +39,12 @@ var __importDefault =
   };
 Object.defineProperty(exports, "__esModule", { value: true });
 const react_native_tor_1 = __importDefault(require("react-native-tor"));
+const tor = (0, react_native_tor_1.default)();
 class HTTPClient {
   constructor(config) {
     this.config = config;
     if (config === null || config === void 0 ? void 0 : config.useTor) {
-      this.tor = (0, react_native_tor_1.default)();
+      this.tor = tor;
     } else if (
       !(config === null || config === void 0 ? void 0 : config.useFetch)
     ) {
@@ -60,9 +61,8 @@ class HTTPClient {
         url = this.config.proxy;
       }
       if (this.tor) {
-        yield this.tor.stopIfRunning();
-        yield this.tor.startIfNotStarted();
         try {
+          yield this.tor.startIfNotStarted();
           if (method === "GET") {
             const response = yield this.tor.get(
               url,
@@ -85,7 +85,9 @@ class HTTPClient {
               return response.json;
             }
           }
-        } catch (e) {}
+        } catch (e) {
+          this.tor.stopIfRunning();
+        }
         return false;
       } else if (this.blobUtil) {
         return yield this.blobUtil
