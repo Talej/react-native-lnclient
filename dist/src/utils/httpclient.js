@@ -39,11 +39,17 @@ var __importDefault =
   };
 Object.defineProperty(exports, "__esModule", { value: true });
 const react_native_tor_1 = __importDefault(require("react-native-tor"));
-const tor = (0, react_native_tor_1.default)();
+let tor = null;
+try {
+  tor = (0, react_native_tor_1.default)();
+} catch (e) {}
 class HTTPClient {
   constructor(config) {
     this.config = config;
-    if (config === null || config === void 0 ? void 0 : config.useTor) {
+    if (
+      (config === null || config === void 0 ? void 0 : config.useTor) &&
+      tor
+    ) {
       this.tor = tor;
     } else if (
       !(config === null || config === void 0 ? void 0 : config.useFetch)

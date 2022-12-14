@@ -1,7 +1,10 @@
 import { LooseObject } from '../types'
 import TorBridge from 'react-native-tor'
 
-const tor = TorBridge()
+let tor: any = null
+try {
+  tor = TorBridge()
+} catch (e) {}
 
 type ConfigProps =
   | {
@@ -21,7 +24,7 @@ export default class HTTPClient {
   constructor (config: ConfigProps) {
     this.config = config
 
-    if (config?.useTor) {
+    if (config?.useTor && tor) {
       this.tor = tor
     } else if (!config?.useFetch) {
       this.blobUtil = require('react-native-blob-util').default
